@@ -1,107 +1,16 @@
-/*
-Required connections between Arduino and qik 2s12v10:
 
-      Arduino   qik 2s12v10
----------------------------
-          GND - GND
-Digital Pin 2 - TX
-Digital Pin 3 - RX
-Digital Pin 4 - RESET
-
-DO NOT connect the 5V output on the Arduino to the 5V output on the qik 2s12v10!
-*/
-
-#include <SoftwareSerial.h>
-#include <PololuQik.h>
-
-PololuQik2s12v10 qik(8, 9, 10); //changed from 2, 3, 4
+extern int x;
 
 void setup()
 {
-  Serial.begin(115200);
-  Serial.println("qik 2s12v10 dual serial motor controller");
-  volatile long encA = 0;
-  qik.init();
-  attachInterrupt(0, EncoderA, RISING);
-  Serial.print("Firmware version: ");
-  Serial.write(qik.getFirmwareVersion());
-  Serial.println();
+	Serial.begin(9600);
+	//qik.init();
+        initMotors();
+       // encM0=0;
+        x=10;
 }
-
-
-void EncoderA()
-{
-  encA++;
-}
-
 void loop()
 {
-  qik.setM0Speed(127);
-  Serial.println(encA);
-  return;
-  for (int i = 0; i <= 127; i++)
-  {
-    qik.setM0Speed(i);
-    if (abs(i) % 64 == 32)
-    {
-      Serial.print("M0 current: ");
-      Serial.println(qik.getM0CurrentMilliamps());
-    }
-    delay(5);
-  }
-
-  for (int i = 127; i >= -127; i--)
-  {
-    qik.setM0Speed(i);
-    if (abs(i) % 64 == 32)
-    {
-      Serial.print("M0 current: ");
-      Serial.println(qik.getM0CurrentMilliamps());
-    }
-    delay(5);
-  }
-
-  for (int i = -127; i <= 0; i++)
-  {
-    qik.setM0Speed(i);
-    if (abs(i) % 64 == 32)
-    {
-      Serial.print("M0 current: ");
-      Serial.println(qik.getM0CurrentMilliamps());
-    }
-    delay(5);
-  }
-
-  for (int i = 0; i <= 127; i++)
-  {
-    qik.setM1Speed(i);
-    if (abs(i) % 64 == 32)
-    {
-      Serial.print("M1 current: ");
-      Serial.println(qik.getM1CurrentMilliamps());
-    }
-    delay(5);
-  }
-
-  for (int i = 127; i >= -127; i--)
-  {
-    qik.setM1Speed(i);
-    if (abs(i) % 64 == 32)
-    {
-      Serial.print("M1 current: ");
-      Serial.println(qik.getM1CurrentMilliamps());
-    }
-    delay(5);
-  }
-
-  for (int i = -127; i <= 0; i++)
-  {
-    qik.setM1Speed(i);
-    if (abs(i) % 64 == 32)
-    {
-      Serial.print("M1 current: ");
-      Serial.println(qik.getM1CurrentMilliamps());
-    }
-    delay(5);
-  }
+	//qik.setM0speed(127);
+	Serial.print(getRotations());
 }
