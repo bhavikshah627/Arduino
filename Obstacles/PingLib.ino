@@ -1,3 +1,5 @@
+//basic PingLibrary
+
 int getPingDist(int pingPin)
 {
 	// establish variables for duration of the ping, 
@@ -19,7 +21,27 @@ int getPingDist(int pingPin)
 	return cm;
 }
 
-
+void setDist(int tDist, int pingPin) //this requires motorLib to function
+{
+  //adjusts the robot until distance from ping to object is specified dist
+  int curDist = getPintDist(pingPin)
+  if(curDist < tDist)
+  {
+    while(curDist < tDist)
+    {
+      int curDist = getPintDist(pingPin)
+      setbothSpeeds(-20, -20);
+    }
+  }
+  if(curDist > tDist)
+  {
+    while(curDist > tDist)
+    {
+      int curDist = getPintDist(pingPin)
+      setbothSpeeds(20, 20);
+    }
+  }  
+}
 long microsecondsToCentimeters(long microseconds)
 {
 	// The speed of sound is 340 m/s or 29 microseconds per centimeter.
@@ -27,10 +49,3 @@ long microsecondsToCentimeters(long microseconds)
 	// object we take half of the distance travelled.
 	return microseconds / 29 / 2;
 }
-
-/*void loop()
-{
-	int pingdist = getPingDist(7);
-	Serial.println(pingdist);
-	delay(25);
-}*/
