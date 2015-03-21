@@ -2,7 +2,7 @@
 
 const int analogInPinOne = A0;
 const int analogInPinTwo = A1;
-const int analogInPinThree = A2;
+const int analogInPinThree = A4;
 
 const int BLK_L = 80;
 const int GRN_L = 127;
