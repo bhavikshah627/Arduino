@@ -6,7 +6,7 @@ void setup()
 }
 void loop()
 {   
-  setM0speed(50);
+  setbothSpeeds(50, 50);
   
   Serial.println(getRotations());
 }

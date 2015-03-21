@@ -24,12 +24,12 @@ int getPingDist(int pingPin)
 void setDist(int tDist, int pingPin) //this requires motorLib to function
 {
   //adjusts the robot until distance from ping to object is specified dist
-  int curDist = getPintDist(pingPin)
+  int curDist = getPingDist(pingPin);
   if(curDist < tDist)
   {
     while(curDist < tDist)
     {
-      int curDist = getPintDist(pingPin)
+      int curDist = getPingDist(pingPin);
       setbothSpeeds(-20, -20);
     }
   }
@@ -37,7 +37,7 @@ void setDist(int tDist, int pingPin) //this requires motorLib to function
   {
     while(curDist > tDist)
     {
-      int curDist = getPintDist(pingPin)
+      int curDist = getPingDist(pingPin);
       setbothSpeeds(20, 20);
     }
   }  

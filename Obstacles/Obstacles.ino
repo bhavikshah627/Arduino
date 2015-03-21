@@ -1,6 +1,6 @@
 //Last updated 3/7/15
 
-
+extern float WB;
 int Ping; ////////put pingpin here
 
 boolean checkSide()
@@ -25,10 +25,10 @@ void obstAvoidP1(int cm)
  float bufferZone = 5; //space in between robot and obstacle -- change as needed
  float tpwr = 70; //taget power level (0-127)
  float inDia =  radius + bufferZone; //the inner diamter of the "ratio of circles"
- float outDia = inDia = WB;
+ float outDia = inDia + WB;
  float pwrRatio = inDia/outDia;
  
- setDist(10);
+ setDist(10, Ping);
  boolean side = checkSide();
  //does initial turn
  if(side)
@@ -42,9 +42,9 @@ void obstAvoidP1(int cm)
  //while(lightvals[0] > blackval)
  //{ //getlightvals();
  if(side)
-   setbothSpeeds(tpwr * pwrRatio, twpr);
+   setbothSpeeds(tpwr * pwrRatio, tpwr);
   else if(!side)
-    setbothSpeeds(tpwr, tpwr *  pwrRatio
+    setbothSpeeds(tpwr, tpwr *pwrRatio  );
  //}
 }
 
