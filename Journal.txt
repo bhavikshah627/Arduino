@@ -1,0 +1,12 @@
+3/14 - Pi Day!
+Val - Extensive research on replacement parts because the rods for our robot had not arrived on time
+Sergei -  Working on our gear set-up and how to make them mesh properly
+"I was too busy trying to get the crown gears to mesh and I was like AHHHHHH"(Sergei 2015).
+Will - built color sensor array for line tracing -- started programming our line tracing program
+Bhavik - Added new functions to our motor and ping libraries; finished writing the phase 1 obstacle program
+
+3/21 - 321 Day!
+Val - designing basket for the claw servo motor
+Sergei - Finished wiring motors on the robot 
+Will - 
+3/28 -  
