@@ -24,8 +24,8 @@ void EncoderA() //that danged encoder -- interupting everything
 
 void stopMotors()
 {
-  qik.setM0speed(0);
-  qik.setM1speed(0);
+  qik.setM0Speed(0);
+  qik.setM1Speed(0);
 }
 
 void resetEncoder()
@@ -69,7 +69,7 @@ void specDist(int tCM, int tSpeed) //if tSpeed is negative it goes back
   }  
 }
 
-void specDistTurn(int tDeg, int tSpeed, boolean turn) // true = turn right, false = turn left
+void specDistTurn(int tDeg, int tSpeed, boolean turn) // true = turnright, false = turnleft
 {
  int target = tDeg * encperDEG;
  stopMotors();

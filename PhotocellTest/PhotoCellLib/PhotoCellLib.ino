@@ -46,13 +46,13 @@ void loop()
 {
   if (getRHT() > TRS_R_1 && getRHT() < TRS_R_2)
   {
-    setbothSpeeds(50, -30);
-    //turn right
+    specDistTurn(90, 70, true);//setbothSpeeds(50, -30);
+    //turn  90 right
   }
   else if (getLFT() > TRS_L_1 && getLFT() < TRS_R_2)
   {
-    setbothSpeeds(-30, 50);
-    //turn left
+    specDistTurn(90, 70, false);//setbothSpeeds(-30, 50);
+    //turn 90 left
   }
   else if (getMID() < TRS_M_1)
   {
@@ -92,4 +92,5 @@ void loop()
       //forward
     }
   }
+  Serial.print(getLFT(), getMID(), getRHT());
 }
