@@ -67,6 +67,7 @@ void specDist(int tCM, int tSpeed) //if tSpeed is negative it goes back
   {
     setbothSpeeds(tSpeed, tSpeed);
   }  
+  stopMotors();
 }
 
 void specDistTurn(int tDeg, int tSpeed, boolean turn) // true = turnright, false = turnleft
@@ -81,4 +82,5 @@ void specDistTurn(int tDeg, int tSpeed, boolean turn) // true = turnright, false
    else
      setbothSpeeds(-tSpeed, tSpeed);
 }
+
 }
