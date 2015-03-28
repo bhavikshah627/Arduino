@@ -1,5 +1,3 @@
-//#include <MotorLib.h>
-
 const int analogInPinOne = A0;
 const int analogInPinTwo = A1;
 const int analogInPinThree = A4;
@@ -46,13 +44,13 @@ void loop()
 {
   if (getRHT() > TRS_R_1 && getRHT() < TRS_R_2)
   {
-    specDistTurn(90, 70, true);//setbothSpeeds(50, -30);
-    //turn  90 right
+    setbothSpeeds(50, -30);
+    //turn right
   }
   else if (getLFT() > TRS_L_1 && getLFT() < TRS_R_2)
   {
-    specDistTurn(90, 70, false);//setbothSpeeds(-30, 50);
-    //turn 90 left
+    setbothSpeeds(-30, 50);
+    //turn left
   }
   else if (getMID() < TRS_M_1)
   {
@@ -92,5 +90,4 @@ void loop()
       //forward
     }
   }
-  Serial.print(getLFT(), getMID(), getRHT());
 }
