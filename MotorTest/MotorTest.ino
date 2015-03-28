@@ -6,6 +6,8 @@ void setup()
 }
 void loop()
 {   
-  
-  Serial.println(getRotations());
+  specDistTurn(90, 30, true);
+  while(true)
+  {
+  }
 }
