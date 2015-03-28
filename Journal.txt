@@ -1,12 +1,23 @@
 3/14 - Pi Day!
-Val - Extensive research on replacement parts because the rods for our robot had not arrived on time
-Sergei -  Working on our gear set-up and how to make them mesh properly
+	Val - Extensive research on replacement parts because the rods for our robot had not arrived on time
+	Sergei -  Working on our gear set-up and how to make them mesh properly
 "I was too busy trying to get the crown gears to mesh and I was like AHHHHHH"(Sergei 2015).
-Will - built color sensor array for line tracing -- started programming our line tracing program
-Bhavik - Added new functions to our motor and ping libraries; finished writing the phase 1 obstacle program
+	Will - built color sensor array for line tracing -- started programming our line tracing program
+	Bhavik - Added new functions to our motor and ping libraries; finished writing the phase 1 obstacle program
 
 3/21 - 321 Day!
-Val - designing basket for the claw servo motor
-Sergei - Finished wiring motors on the robot 
-Will - 
-3/28 -  
+	Val - designing basket for the claw servo motor
+	Sergei - Finished wiring motors on the robot 
+	Will - Finished programming line tracing
+	Bhavik - Helped Sergei with 
+
+3/25-
+	Sergei - Motor side collapsed due to using moldable plastic instead of super glue, had to reassemble. Started designing new top plate and claw
+3/26 - 
+	Sergei - Wired up the photocell, motor system working perfectly
+3/27 - 
+	Sergei - worked on claw design, worked  
+
+3/28 -
+	Val - designed ping mounts 
+ 
