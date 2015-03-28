@@ -2,10 +2,10 @@
 #include <SoftwareSerial.h>
 
 
-PololuQik2s12v10 qik(8, 9, 10); // Object of our Pololu Qik; hooked up to pins 8,9,10
-volatile long encM0 = 0;
-float tireD = 3.53; //cm of tire diameter
-float WB = 12.01; //cm of the WB + half the wheels
+ PololuQik2s12v10 qik(8, 9, 10); // Object of our Pololu Qik; hooked up to pins 8,9,10
+ volatile long encM0 = 0;
+float tireD = 3.5; //cm of tire diameter
+float WB = 22; //cm of the WB + half the wheels
 float pi = 3.14;
 float encperCM = 564/(tireD*pi);
 float encperDEG = ((WB*pi)*encperCM)/360;
@@ -24,8 +24,7 @@ void EncoderA() //that danged encoder -- interupting everything
 
 void stopMotors()
 {
-  qik.setM0speed(0);
-  qik.setM1speed(0);
+  qik.setBrakes(127, 127);
 }
 
 void resetEncoder()
@@ -67,9 +66,10 @@ void specDist(int tCM, int tSpeed) //if tSpeed is negative it goes back
   {
     setbothSpeeds(tSpeed, tSpeed);
   }  
+  stopMotors();
 }
 
-void specDistTurn(int tDeg, int tSpeed, boolean turn) // true = turn right, false = turn left
+void specDistTurn(int tDeg, int tSpeed, boolean turn) // true = turnright, false = turnleft
 {
  int target = tDeg * encperDEG;
  stopMotors();
@@ -81,4 +81,19 @@ void specDistTurn(int tDeg, int tSpeed, boolean turn) // true = turn right, fals
    else
      setbothSpeeds(-tSpeed, tSpeed);
 }
+stopMotors();
+}
+
+
+void oneRev(int tspeed)
+{
+  stopMotors();
+  resetEncoder();
+  while(encM0 <564)
+  {
+    setbothSpeeds(tspeed, tspeed);
+  }
+ // stopMotors();
+ qik.setSpeeds(0, 0);
+ stopMotors();
 }
