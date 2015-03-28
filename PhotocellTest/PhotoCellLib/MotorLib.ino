@@ -2,8 +2,8 @@
 #include <SoftwareSerial.h>
 
 
- PololuQik2s12v10 qik(8, 9, 10); // Object of our Pololu Qik; hooked up to pins 8,9,10
- volatile long encM0 = 0;
+PololuQik2s12v10 qik(8, 9, 10); // Object of our Pololu Qik; hooked up to pins 8,9,10
+volatile long encM0 = 0;
 float tireD = 3.53; //cm of tire diameter
 float WB = 12.01; //cm of the WB + half the wheels
 float pi = 3.14;
