@@ -4,10 +4,10 @@ const int analogInPinOne = A0;
 const int analogInPinTwo = A2;
 const int analogInPinThree = A1;
 
-const int BLK_L = 90;
-const int WHT_L = 235;
-const int BLK_R = 60;
-const int WHT_R = 155;
+const int BLK_L = 145;
+const int WHT_L = 265;
+const int BLK_R = 115;
+const int WHT_R = 185;
 
 const int TRS_L = (BLK_L + WHT_L) / 2;
 const int TRS_R = (BLK_R + WHT_R) / 2;
