@@ -1,7 +1,7 @@
 int readvalue;
-const int analogInPinOne = A0;
-const int analogInPinTwo = A2;
-const int analogInPinThree = A1;
+const int analogPinOne = A0;
+const int analogPinTwo = A2;
+const int analogPinThree = A1;
 
 const int cl_0 = 65;  //black
 const int cl_1 = 75;  //dark green
@@ -20,15 +20,9 @@ void setup()
 }
 void loop()
 {
-  readvalue = analogRead(analogInPinOne);
-  Serial.print(readvalue);
-  Serial.print("\t");
-  readvalue = analogRead(analogInPinTwo);
-  Serial.print(readvalue);
-  Serial.print("\t");
-  readvalue = analogRead(analogInPinThree);
-  Serial.print(readvalue);
-  Serial.print("\n");
+  char buf[10];
+  sprintf(buf, "%d %d", analogRead(analogPinOne), analogRead(analogPinThree));
+  Serial.println(buf);
   
   /*if (readvalue < trs_1)
     Serial.print(" Black");

@@ -5,9 +5,6 @@ void setup()
   initMotors();
 }
 void loop()
-{   
-  specDistTurn(90, 30, true);
-  while(true)
-  {
-  }
+{
+    setbothSpeeds(30, 30);
 }
