@@ -21,7 +21,7 @@ void setup()
 void loop()
 {
   char buf[10];
-  sprintf(buf, "%d %d", analogRead(analogPinOne), analogRead(analogPinThree));
+  sprintf(buf, "%d, %d, %d", analogRead(analogPinOne), analogRead(analogPinTwo), analogRead(analogPinThree));
   Serial.println(buf);
   
   /*if (readvalue < trs_1)
