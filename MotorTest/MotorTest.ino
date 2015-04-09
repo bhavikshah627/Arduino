@@ -6,5 +6,8 @@ void setup()
 }
 void loop()
 {
-    setbothSpeeds(30, 30);
+    specDistTurn(90, 30, true);
+    while(true)
+    {
+    }
 }

@@ -4,15 +4,15 @@ const int analogInPinOne = A0;
 const int analogInPinTwo = A2;
 const int analogInPinThree = A1;
 
-const int BLK_L = 145;
-const int GRN_L = 170; //change later
-const int WHT_L = 265;
-const int BLK_M = 85;       //middles need to be changed
+const int BLK_L = 100;
+const int GRN_L = 170; 
+const int WHT_L = 235;
+const int BLK_M = 140;       
 const int GRN_M = 165;
-const int WHT_M = 270;
-const int BLK_R = 115;
-const int GRN_R = 145; //change later
-const int WHT_R = 185;
+const int WHT_M = 390;
+const int BLK_R = 140;
+const int GRN_R = 200; 
+const int WHT_R = 270;
 
 const int TRS_L_1 = (BLK_L + GRN_L) / 2;
 const int TRS_L_2 = (GRN_L + WHT_L) / 2;
@@ -32,6 +32,7 @@ void setup()
 {
   Serial.begin(9600);
   initMotors();
+  delay(3000);
 }
 
 void loop() 
@@ -58,6 +59,6 @@ void loop()
     setbothSpeeds(-40,60);
   
   char buf[10];
-  sprintf(buf, "%d %d", lftval, rhtval);
+  sprintf(buf, "%d %d %d", lftval, midval, rhtval);
   Serial.println(buf);
 }
