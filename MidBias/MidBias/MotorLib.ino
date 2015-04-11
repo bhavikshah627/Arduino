@@ -13,7 +13,7 @@ void initMotors() //call this in your setup function or else no motors for you :
 {
 
   	qik.init();
-	attachInterrupt(0, EncoderA, RISING);
+	//attachInterrupt(0, EncoderA, RISING);
         encM0 = 0;
 }
 

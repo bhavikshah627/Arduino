@@ -4,15 +4,15 @@ const int analogInPinOne = A0;
 const int analogInPinTwo = A2;
 const int analogInPinThree = A1;
 
-const int BLK_L = 140;
+const int BLK_L = 150;
 const int GRN_L = 192; 
 const int WHT_L = 277;
 
-const int BLK_M = 350;       
-const int GRN_M = 350;
-const int WHT_M = 430;
+const int BLK_M = 333;       
+const int GRN_M = 363;
+const int WHT_M = 486;
 
-const int BLK_R = 230;
+const int BLK_R = 212; 
 const int GRN_R = 248; 
 const int WHT_R = 330;
 
@@ -50,18 +50,29 @@ void loop()
   const int  fpwr = 40;
   const int  bpwr = -30;
   //exception for left green
+  /*
+  -
+  -
+  -
+  --------
+  -
+  -
+  -
   
-  if(rhtval < TRS_R_1 && state != VEER_RIGHT )
-  {  //right sees black
-    /*if(midval<TRS_M_1)
-    {
-      specDist(5, fpwr); 
-    }
-    else
-    {*/
+  */
+//  if(lftval > TRS_L_1 && lftval < TRS_L_2){
+//    specDistTurn(90, 30, false);
+//  }
+//  else if(rhtval > TRS_R_1 && rhtval < TRS_R_2){
+//    specDistTurn(90, 30, true);  
+//  }
+  if (midval < TRS_R_1 && state != VEER_STRAIGHT){
+    setbothSpeeds(fpwr, fpwr);
+    state = VEER_STRAIGHT;
+  }
+  else if(rhtval < TRS_R_1 && state != VEER_RIGHT ){  //right sees black
     setbothSpeeds(fpwr, bpwr);
     state = VEER_RIGHT;
-    //}
   }
   else if(lftval > TRS_L_2 && rhtval > TRS_R_2 && state != VEER_STRAIGHT){  //left and right sees white
     setbothSpeeds(fpwr, fpwr);
@@ -70,10 +81,6 @@ void loop()
   else if(lftval < TRS_L_1 && rhtval > TRS_R_2 && state != VEER_LEFT){ // left sees black and right sees white
     setbothSpeeds(bpwr,fpwr);
     state = VEER_LEFT;
-  }
-  else
-  {
-    setbothSpeeds(fpwr,fpwr);
   }
   
   char buf[10];

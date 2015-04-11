@@ -4,15 +4,17 @@ const int analogInPinOne = A0;
 const int analogInPinTwo = A2;
 const int analogInPinThree = A1;
 
-const int BLK_L = 90;
-const int GRN_L = 170;
-const int WHT_L = 235;
-const int BLK_M = 85;
-const int GRN_M = 165;
-const int WHT_M = 270;
-const int BLK_R = 60;
-const int GRN_R = 115;
-const int WHT_R = 155;
+const int BLK_L = 150;
+const int GRN_L = 192; 
+const int WHT_L = 277;
+
+const int BLK_M = 333;       
+const int GRN_M = 363;
+const int WHT_M = 486;
+
+const int BLK_R = 212; 
+const int GRN_R = 248; 
+const int WHT_R = 330;
 
 const int TRS_L_1 = (BLK_L + GRN_L) / 2;
 const int TRS_L_2 = (GRN_L + WHT_L) / 2;
@@ -20,6 +22,9 @@ const int TRS_M_1 = (BLK_M + GRN_M) / 2;
 const int TRS_M_2 = (GRN_M + WHT_M) / 2;
 const int TRS_R_1 = (BLK_R + GRN_R) / 2;
 const int TRS_R_2 = (GRN_R + WHT_R) / 2;
+
+const int fpwr = 40;
+const int bpwr = -30;
 
 int LFT, MID, RHT;
 
@@ -75,7 +80,7 @@ void loop()
       }
       else if (getLFT() > TRS_L_2)
       {
-        setbothSpeeds(25,0);
+        setbothSpeeds(fpwr,bpwr);
         //right
       }
     }
@@ -83,7 +88,7 @@ void loop()
     {
       if (getLFT() < TRS_L_1)
       {
-        setbothSpeeds(0,25);
+        setbothSpeeds(bpwr,fpwr);
         //left
       }
       else if (getLFT() > TRS_L_2)
