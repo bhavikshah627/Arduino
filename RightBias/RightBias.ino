@@ -72,14 +72,10 @@ void loop()
   if(rhtval < TRS_R && state != VEER_RIGHT )
 =======
   //getting color data <3
-   uint16_t clear, red, green, blue;
-
+  uint16_t clear, red, green, blue;
   tcs.setInterrupt(false);      // turn on LED
-
   delay(60);  // takes 50ms to read 
-  
-  tcs.getRawData(&red, &green, &blue, &clear);
-
+   tcs.getRawData(&red, &green, &blue, &clear);
   tcs.setInterrupt(true);  // turn off LED
   
   //<3
