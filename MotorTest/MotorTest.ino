@@ -6,8 +6,8 @@ void setup()
 }
 void loop()
 {
-    specDistTurn(90, 30, true);
-    while(true)
-    {
-    }
+    setbothSpeeds(50, -50);
+    delay(3000);
+    setbothSpeeds(-50, 50);
+    delay(3000);
 }
