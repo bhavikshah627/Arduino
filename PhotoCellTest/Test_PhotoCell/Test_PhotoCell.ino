@@ -23,7 +23,6 @@ void loop()
   char buf[10];
   sprintf(buf, "%d, %d, %d", analogRead(analogPinOne), analogRead(analogPinTwo), analogRead(analogPinThree));
   Serial.println(buf);
-  delay(100);
   
   /*if (readvalue < trs_1)
     Serial.print(" Black");

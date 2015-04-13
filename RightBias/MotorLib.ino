@@ -60,7 +60,7 @@ long getEncoderVal()
 void specDist(int tCM, int tSpeed) //if tSpeed is negative it goes back
 {
   int target = tCM * encperCM; 
-  //stopMotors();
+  stopMotors();
   resetEncoder();
   while(encM0 < target)
   {
@@ -72,7 +72,7 @@ void specDist(int tCM, int tSpeed) //if tSpeed is negative it goes back
 void specDistTurn(int tDeg, int tSpeed, boolean turn) // true = turnright, false = turnleft
 {
  int target = tDeg * encperDEG;
-// stopMotors();
+ stopMotors();
  resetEncoder();
  while(encM0<target)
  {
