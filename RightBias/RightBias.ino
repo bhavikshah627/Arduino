@@ -1,12 +1,23 @@
 //#include <MotorLib.h>
+#include <Wire.h>
+#include "Adafruit_TCS34725.h"
 
 const int analogInPinOne = A0;
 const int analogInPinTwo = A2;
 const int analogInPinThree = A1;
 
+<<<<<<< HEAD
 const int BLK_L = 225;
 const int GRN_L = 258; 
 const int WHT_L = 377;
+=======
+Adafruit_TCS34725 tcs = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_50MS, TCS34725_GAIN_4X);
+
+
+const int BLK_L = 110;
+const int GRN_L = 160; 
+const int WHT_L = 223;
+>>>>>>> origin/master
 
 const int BLK_M = 550;       
 const int GRN_M = 485;
@@ -55,9 +66,29 @@ void loop()
   const int  bpwr = -30;
   //exception for left green
   
+<<<<<<< HEAD
  // if(lftval > TRS_R_1 && lftval < TRS_R_2)
    // specDistTurn(90, fpwr, false);
   if(rhtval < TRS_R && state != VEER_RIGHT )
+=======
+  //getting color data <3
+   uint16_t clear, red, green, blue;
+
+  tcs.setInterrupt(false);      // turn on LED
+
+  delay(60);  // takes 50ms to read 
+  
+  tcs.getRawData(&red, &green, &blue, &clear);
+
+  tcs.setInterrupt(true);  // turn off LED
+  
+  //<3
+  
+  
+  if(lftval > TRS_R_1 && lftval < TRS_R_2)
+    specDistTurn(90, fpwr, false);
+  else if(rhtval < TRS_R_1 && state != VEER_RIGHT )
+>>>>>>> origin/master
   {  //right sees black
     if(midval < TRS_M)
     {
