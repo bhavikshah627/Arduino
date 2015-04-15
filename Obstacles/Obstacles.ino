@@ -1,4 +1,3 @@
-
 const int FSHARP = A3;
 
 float getSideDist(int x)
@@ -21,7 +20,7 @@ float getFrontDist(int x)
 
 boolean checkSide()
 { //returns true if rightside is greater, left is false
-  specDistTurn(90, 50, true);
+  specDistTurn(90, 60, true);
   delay(500);
   
   int rightDist = getFrontDist(analogRead(FSHARP));
@@ -80,7 +79,8 @@ void loop()
   Serial.print("\t");
   Serial.println(getSideDist(x));
   delay(1000);
-  checkSide();
+  bool hi = checkSide();
+  Serial.println(hi);
   delay(3000);
   /*int x = analogRead(FSHARP);
   setbothSpeeds(50, 50);
