@@ -20,4 +20,16 @@
 
 3/28 -
 	Val - designed ping mounts 
+
+4/9 - 
+	Bhavik - Uncovered multiple motor problems while testing, had to 	take apart the robot and figure out what wasn't working.
+
+4/10 - 
+	Bhavik - fixed problems with the motor mounts
+4/11
+	Bhavik & Will-  Added new mounts to fix slack in the motor
+	
+4/12
+4/13
+
  
