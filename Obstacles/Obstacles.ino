@@ -74,19 +74,6 @@ void setup()
 
 void loop()
 {
-  int x = analogRead(A0);
-  Serial.print(x);
-  Serial.print("\t");
-  Serial.println(getSideDist(x));
-  delay(1000);
-  /*int x = analogRead(FSHARP);
-  setbothSpeeds(50, 50);
-  float dist = getFrontDist(x);
-  Serial.println(dist);
-  if (dist < 11 && dist != -1)
-  {
-    stopMotors();
-    while (true) { }
-  }*/
+  int x = analogRead(
 
 }
