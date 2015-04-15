@@ -1,4 +1,3 @@
-
 const int FSHARP = A3;
 
 float getSideDist(int x)
@@ -21,7 +20,7 @@ float getFrontDist(int x)
 
 boolean checkSide()
 { //returns true if rightside is greater, left is false
-  specDistTurn(90, 50, true);
+  specDistTurn(90, 60, true);
   delay(500);
   
   int rightDist = getFrontDist(analogRead(FSHARP));
@@ -70,10 +69,31 @@ void obstAvoidP1(int cm)
 void setup()
 {
   Serial.begin(9600);
+  initMotors();
 }
 
 void loop()
 {
+<<<<<<< HEAD
   int x = analogRead(
+=======
+  int x = analogRead(A0);
+  Serial.print(x);
+  Serial.print("\t");
+  Serial.println(getSideDist(x));
+  delay(1000);
+  bool hi = checkSide();
+  Serial.println(hi);
+  delay(3000);
+  /*int x = analogRead(FSHARP);
+  setbothSpeeds(50, 50);
+  float dist = getFrontDist(x);
+  Serial.println(dist);
+  if (dist < 11 && dist != -1)
+  {
+    stopMotors();
+    while (true) { }
+  }*/
+>>>>>>> origin/master
 
 }
