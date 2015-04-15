@@ -84,7 +84,7 @@ void loop()
     
   //exception for left green
   // if(lftval > TRS_R_1 && lftval < TRS_R_2)
-  // specDistTurn(90, fpwr, false);
+  // specDistTurn(90, fpwr, false); 
   if(rhtval < TRS_R && state != VEER_RIGHT )
   {  //right sees black
     if(midval<TRS_M)
