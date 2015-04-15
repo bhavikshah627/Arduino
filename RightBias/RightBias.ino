@@ -114,7 +114,7 @@ void loop()
     setbothSpeeds(bpwr, fpwr);
     state = VEER_LEFT;
   }
-  else
+  else  
   {
     int timer = millis();
     while (lftval > TRS_L && rhtval > TRS_R && state != VEER_STRAIGHT) //left and right sees white //wobble wobble wobble
