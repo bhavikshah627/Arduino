@@ -70,6 +70,7 @@ void obstAvoidP1(int cm)
 void setup()
 {
   Serial.begin(9600);
+  initMotors();
 }
 
 void loop()
@@ -79,6 +80,8 @@ void loop()
   Serial.print("\t");
   Serial.println(getSideDist(x));
   delay(1000);
+  checkSide();
+  delay(3000);
   /*int x = analogRead(FSHARP);
   setbothSpeeds(50, 50);
   float dist = getFrontDist(x);
