@@ -56,10 +56,10 @@ float calcRadius(boolean side)
   float deg = getEncoderVal() / encperDEG;
   Serial.println(idist);
   Serial.println(deg);
-  return (idist*abs(tan(deg * (3.14 / 180))));
+  return (idist * abs(tan(deg * (3.14 / 180))));
 }
 
-       void obstAvoidP1(float cm)
+void obstAvoidP1(float cm)
 {
   float radius = cm;
   float bufferZone = 5; //space in between robot and obstacle -- change as needed
