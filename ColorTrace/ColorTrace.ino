@@ -142,8 +142,5 @@ void loop()
     setbothSpeeds(bpwr, fpwr);
     state = VEER_LEFT;
   }
-  else if (clear[0] > T_L_2 && clear[1] > T_R_2 && state != VEER_STRAIGHT) { //left and right sees white
-    setbothSpeeds(fpwr, fpwr);
-    state = VEER_STRAIGHT;
   }
 }
