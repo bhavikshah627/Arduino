@@ -6,10 +6,23 @@
 #include <Wire.h>
  
  
+ int mux(byte channel)
+{
+  const int MUX = 0x70;
+  byte controlRegister = 0x04;  
+  controlRegister |= channel;
+  Wire.beginTransmission(MUX);
+  if (channel == 0xFF){Wire.write(0x00);} //deselect all channels
+  else {Wire.write(controlRegister);}     //set to selected channel
+  return Wire.endTransmission();
+}
+
+ 
 void setup()
 {
   Wire.begin();
- 
+  if (mux(2)) Serial.println("Yo");;
+
   Serial.begin(9600);
   Serial.println("\nI2C Scanner");
 }
