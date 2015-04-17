@@ -16,6 +16,7 @@
 */
 /**************************************************************************/
 #include <avr/pgmspace.h>
+#include <util/delay.h>
 #include <stdlib.h>
 #include <math.h>
 
@@ -106,6 +107,7 @@ uint16_t Adafruit_TCS34725::read16(uint8_t reg)
   return x;
 }
 
+
 /**************************************************************************/
 /*!
     Enables the device
@@ -159,8 +161,7 @@ Adafruit_TCS34725::Adafruit_TCS34725(tcs34725IntegrationTime_t it, tcs34725Gain_
 /**************************************************************************/
 boolean Adafruit_TCS34725::begin(void) 
 {
-  Wire.begin();
-  
+
   /* Make sure we're actually connected */
   uint8_t x = read8(TCS34725_ID);
   Serial.println(x, HEX);
@@ -212,6 +213,61 @@ void Adafruit_TCS34725::setGain(tcs34725Gain_t gain)
   _tcs34725Gain = gain;
 }
 
+// returns 0 if good
+//  -1 if timeout
+// or return value from endTramsission if failure
+
+int Adafruit_TCS34725::getRawDataEx(uint16_t *r, uint16_t *g, uint16_t *b, uint16_t *c)
+{
+	const int reg = TCS34725_CDATAL;   //we start here
+	const int numbytes = 8;
+
+	if (!_tcs34725Initialised) begin();
+	uint16_t x; uint16_t t;
+
+	Wire.beginTransmission(TCS34725_ADDRESS);
+#if ARDUINO >= 100
+	Wire.write(TCS34725_COMMAND_BIT | reg);
+#else
+	Wire.send(TCS34725_COMMAND_BIT | reg);
+#endif
+	int ret = Wire.endTransmission();
+	if (ret) return ret;
+
+	Wire.requestFrom(TCS34725_ADDRESS, numbytes);
+
+	long timeout = 3000 + millis();
+	while (Wire.available() < numbytes) {
+		if (timeout > millis()) return -1;
+	}
+
+	t = Wire.read();
+	x = Wire.read();
+	x <<= 8;
+	x |= t;
+	*c = x;
+
+	t = Wire.read();
+	x = Wire.read();
+	x <<= 8;
+	x |= t;
+	*r = x;
+
+
+	t = Wire.read();
+	x = Wire.read();
+	x <<= 8;
+	x |= t;
+	*g = x;
+
+
+	t = Wire.read();
+	x = Wire.read();
+	x <<= 8;
+	x |= t;
+	*b = x;
+	return 0;
+}
 /**************************************************************************/
 /*!
     @brief  Reads the raw red, green, blue and clear channel values
@@ -227,7 +283,7 @@ void Adafruit_TCS34725::getRawData (uint16_t *r, uint16_t *g, uint16_t *b, uint1
   *b = read16(TCS34725_BDATAL);
   
   /* Set a delay for the integration time */
-  switch (_tcs34725IntegrationTime)
+ /* switch (_tcs34725IntegrationTime)
   {
     case TCS34725_INTEGRATIONTIME_2_4MS:
       delay(3);
@@ -247,7 +303,7 @@ void Adafruit_TCS34725::getRawData (uint16_t *r, uint16_t *g, uint16_t *b, uint1
     case TCS34725_INTEGRATIONTIME_700MS:
       delay(700);
       break;
-  }
+  } */
 }
 
 /**************************************************************************/

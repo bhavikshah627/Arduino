@@ -19,8 +19,7 @@ const int T_M = (B_M + W_M) / 2;
 const int T_R = (B_R + W_R) / 2;
 //const int T_R_2 = (G_R + W_R) / 2;
 
-
-int muxports[] = { 1, 3};
+int muxports[] = {1, 3};
 //left, middle, right;
 const int numports = sizeof(muxports) / sizeof(int);
 uint16_t clear[2], red[2], blue[2], green[2], mclear, mred, mblue, mgreen;
@@ -30,11 +29,8 @@ void getMidC()
 {
 
   if (mux(0)) Serial.println("Yo");
-  tcsleft.setInterrupt(false);      // turn on LED
-
-  delay(60);  // takes 50ms to read
-  tcsleft.getRawData(&mred, &mgreen, &mblue, &mclear);
-  tcsleft.setInterrupt(true);  // turn off LED
+  tcsleft.getRawDataEx(&mred, &mgreen, &mblue, &mclear);
+ 
 
 }
 
@@ -42,19 +38,10 @@ void getMidC()
 void getSideC()
 {
   int index = 0;
-
-  for (index = 0; index < numports; index++) {
-    if (mux(muxports[index])) Serial.println("Yo");
-    tcsleft.setInterrupt(false);      // turn on LED
-  }
-
-  delay(60);  // takes 50ms to read
-
-  for ( index = 0; index < numports; index++)
+  for (index = 0; index < numports; index++)
   {
-    mux(muxports[index]);
-    tcsleft.getRawData(&red[index], &green[index], &blue[index], &clear[index]);
-    tcsleft.setInterrupt(true);  // turn off LED
+    if (mux(muxports[index])) Serial.println("Yo");
+    tcsleft.getRawDataEx(&red[index], &green[index], &blue[index], &clear[index]);
   }
 }
 
@@ -80,18 +67,21 @@ int mux(byte channel)
   return Wire.endTransmission();
 }
 
+
 void setup()
 {
   Serial.begin(9600);
   Wire.begin();
-
-  for (int i = 0; i < numports; i++) {
+  TWBR = 12;
+  for (int i = 0; i < numports; i++)
+  {
     if (mux(muxports[i])) Serial.println("ERROR MUX");
     Serial.print("Init sensor ");
     Serial.println(muxports[i]);
     if (tcsleft.begin()) 
     {
       Serial.println("Found sensor");
+      tcsleft.setInterrupt(false);
     }
     else {
       Serial.println("No TCS34725 found ... check your connections");
@@ -102,15 +92,18 @@ void setup()
   if (mux(0)) Serial.println("ERROR MUX");
   Serial.print("Init sensor ");
   Serial.println(0);
-  if (tcsleft.begin()) {
+  if (tcsleft.begin()) 
+  {
     Serial.println("Found sensor");
+    tcsleft.setInterrupt(false);
   }
-  else {
+  else 
+  {
     Serial.println("No TCS34725 found ... check your connections");
     while (1); // halt!
   }
-
-
+  
+  delay(60);
   initMotors();
   delay(1000);
 }
@@ -123,13 +116,13 @@ void loop()
 
   //0 elment is left, 1 is middle, 2 is right
   getSideC();
+  getMidC();
   char buf[40];
   sprintf(buf, "%d, %d, %d", clear[0], mclear, clear[1]);
   Serial.println(buf);
-  if (clear[1] < T_R/*T_R_1*/  && state != VEER_RIGHT )
+  if (clear[1] < T_R/*_1*/  && state != VEER_RIGHT )
   { //right sees black
-    getMidC();
-    if (mclear < T_M)
+    if (mclear < 1500)
     {
       specDist(1, fpwr);
       specDistTurn(5, fpwr, false);
@@ -141,11 +134,11 @@ void loop()
       state = VEER_RIGHT;
     }
   }
-  else if (clear[0] < T_L/*T_L_1*/  && clear[1] > T_R/*T_R_2*/ && state != VEER_LEFT) { // left sees black and right sees white
+  else if (clear[0] < T_L/*_1*/  && clear[1] > T_R/*_2*/ && state != VEER_LEFT) { // left sees black and right sees white
     setbothSpeeds(bpwr, fpwr);
     state = VEER_LEFT;
   }
-  else if (clear[0] > T_L/*T_L_2*/ && clear[1] > T_R/*T_R_2*/ && state != VEER_STRAIGHT) { //left and right sees white
+  else if (clear[0] > T_L/*_2*/ && clear[1] > T_R/*_2*/ && state != VEER_STRAIGHT) { //left and right sees white
     setbothSpeeds(fpwr, fpwr);
     state = VEER_STRAIGHT;
   }
