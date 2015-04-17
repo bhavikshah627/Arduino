@@ -122,6 +122,7 @@ class Adafruit_TCS34725 {
   boolean  begin(void);
   void     setIntegrationTime(tcs34725IntegrationTime_t it);
   void     setGain(tcs34725Gain_t gain);
+  int      getRawDataEx(uint16_t *r, uint16_t *g, uint16_t *b, uint16_t *c);
   void     getRawData(uint16_t *r, uint16_t *g, uint16_t *b, uint16_t *c);
   uint16_t calculateColorTemperature(uint16_t r, uint16_t g, uint16_t b);
   uint16_t calculateLux(uint16_t r, uint16_t g, uint16_t b);
