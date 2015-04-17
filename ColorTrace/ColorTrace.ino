@@ -2,16 +2,16 @@
 #include <Wire.h>
 #include "Adafruit_TCS34725.h"
 
-const int B_L = 854;
-const int G_L = 1444;
-const int W_L = 3387;
+const int B_L = 930;
+const int G_L = 1567;
+const int W_L = 3358;
 
-const int B_M = 1012;
-const int W_M = 3798;
+const int B_M = 988;
+const int W_M = 3468;
 
-const int B_R = 896;
-const int G_R = 1490;
-const int W_R = 3310;
+const int B_R = 1035;
+const int G_R = 1649;
+const int W_R = 3541;
 
 const int T_L = (B_L + W_L) / 2;
 //const int T_L_2 = (G_L + W_L) / 2;
