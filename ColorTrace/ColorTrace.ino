@@ -2,22 +2,22 @@
 #include <Wire.h>
 #include "Adafruit_TCS34725.h"
 
-const int B_L = 1000;
-const int G_L = 1600;
-const int W_L = 3400;
+const int B_L = 854;
+const int G_L = 1444;
+const int W_L = 3387;
 
-const int B_M = 1200;
-const int W_M = 4000;
+const int B_M = 1012;
+const int W_M = 3798;
 
-const int B_R = 1000;
-const int G_R = 1600;
-const int W_R = 3400;
+const int B_R = 896;
+const int G_R = 1490;
+const int W_R = 3310;
 
-const int T_L_1 = (B_L + G_L) / 2;
-const int T_L_2 = (G_L + W_L) / 2;
+const int T_L = (B_L + W_L) / 2;
+//const int T_L_2 = (G_L + W_L) / 2;
 const int T_M = (B_M + W_M) / 2;
-const int T_R_1 = (B_R + G_R) / 2;
-const int T_R_2 = (G_R + W_R) / 2;
+const int T_R = (B_R + W_R) / 2;
+//const int T_R_2 = (G_R + W_R) / 2;
 
 
 int muxports[] = { 1, 3};
@@ -26,20 +26,20 @@ const int numports = sizeof(muxports) / sizeof(int);
 uint16_t clear[2], red[2], blue[2], green[2], mclear, mred, mblue, mgreen;
 Adafruit_TCS34725 tcsleft = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_50MS, TCS34725_GAIN_4X);
 
-void getMidC() 
+void getMidC()
 {
 
-    if (mux(0)) Serial.println("Yo");
-    tcsleft.setInterrupt(false);      // turn on LED  
+  if (mux(0)) Serial.println("Yo");
+  tcsleft.setInterrupt(false);      // turn on LED
 
   delay(60);  // takes 50ms to read
-    tcsleft.getRawData(&mred, &mgreen, &mblue, &mclear);
-    tcsleft.setInterrupt(true);  // turn off LED
+  tcsleft.getRawData(&mred, &mgreen, &mblue, &mclear);
+  tcsleft.setInterrupt(true);  // turn off LED
 
 }
 
 
-void getSideC() 
+void getSideC()
 {
   int index = 0;
 
@@ -57,8 +57,6 @@ void getSideC()
     tcsleft.setInterrupt(true);  // turn off LED
   }
 }
-
-
 
 const int VEER_NONE = 0;
 const int VEER_LEFT  = 1;
@@ -82,7 +80,6 @@ int mux(byte channel)
   return Wire.endTransmission();
 }
 
-
 void setup()
 {
   Serial.begin(9600);
@@ -92,7 +89,8 @@ void setup()
     if (mux(muxports[i])) Serial.println("ERROR MUX");
     Serial.print("Init sensor ");
     Serial.println(muxports[i]);
-    if (tcsleft.begin()) {
+    if (tcsleft.begin()) 
+    {
       Serial.println("Found sensor");
     }
     else {
@@ -100,19 +98,19 @@ void setup()
       while (1); // halt!
     }
   }
-  
-    if (mux(0)) Serial.println("ERROR MUX");
-    Serial.print("Init sensor ");
-    Serial.println(0);
-    if (tcsleft.begin()) {
-      Serial.println("Found sensor");
-    }
-    else {
-      Serial.println("No TCS34725 found ... check your connections");
-      while (1); // halt!
-    }
-  
-  
+
+  if (mux(0)) Serial.println("ERROR MUX");
+  Serial.print("Init sensor ");
+  Serial.println(0);
+  if (tcsleft.begin()) {
+    Serial.println("Found sensor");
+  }
+  else {
+    Serial.println("No TCS34725 found ... check your connections");
+    while (1); // halt!
+  }
+
+
   initMotors();
   delay(1000);
 }
@@ -120,23 +118,22 @@ void setup()
 void loop()
 {
   static int state = VEER_NONE;
-  const int  fpwr = 30;
-  const int  bpwr = -20;
+  const int  fpwr = 40;
+  const int  bpwr = -30;
 
   //0 elment is left, 1 is middle, 2 is right
   getSideC();
-  getMidC();
   char buf[40];
-  sprintf(buf, "%d, %d, %d", clear[0], mclear, clear[1]); 
+  sprintf(buf, "%d, %d, %d", clear[0], mclear, clear[1]);
   Serial.println(buf);
-  if (clear[1] < T_R_1  && state != VEER_RIGHT )
+  if (clear[1] < T_R/*T_R_1*/  && state != VEER_RIGHT )
   { //right sees black
     getMidC();
-    if (mclear < 1500)
+    if (mclear < T_M)
     {
       specDist(1, fpwr);
       specDistTurn(5, fpwr, false);
-      }
+    }
     else
     {
       Serial.println("RIGHT");
@@ -144,11 +141,11 @@ void loop()
       state = VEER_RIGHT;
     }
   }
-  else if (clear[0] < T_L_1  && clear[1] > T_R_2 && state != VEER_LEFT) { // left sees black and right sees white
+  else if (clear[0] < T_L/*T_L_1*/  && clear[1] > T_R/*T_R_2*/ && state != VEER_LEFT) { // left sees black and right sees white
     setbothSpeeds(bpwr, fpwr);
     state = VEER_LEFT;
   }
-  else if (clear[0] > T_L_2 && clear[1] > T_R_2 && state != VEER_STRAIGHT) { //left and right sees white
+  else if (clear[0] > T_L/*T_L_2*/ && clear[1] > T_R/*T_R_2*/ && state != VEER_STRAIGHT) { //left and right sees white
     setbothSpeeds(fpwr, fpwr);
     state = VEER_STRAIGHT;
   }
