@@ -2,9 +2,40 @@
 #include "Adafruit_TCS34725.h"
 
 
-Adafruit_TCS34725 tcs = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_50MS, TCS34725_GAIN_4X);
-
 const int FSHARP = A3;
+
+int muxports[] = {1, 3};
+//left, middle, right;
+const int numports = sizeof(muxports) / sizeof(int);
+uint16_t clear[2], red[2], blue[2], green[2], mclear, mred, mblue, mgreen;
+Adafruit_TCS34725 tcsleft = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_50MS, TCS34725_GAIN_4X);
+
+
+int mux(byte channel)
+{
+  const int MUX = 0x70;
+  byte controlRegister = 0x04;
+  controlRegister |= channel;
+  Wire.beginTransmission(MUX);
+  if (channel == 0xFF)
+  {
+    Wire.write(0x00); //deselect all channels
+  }
+  else
+  {
+    Wire.write(controlRegister); //set to selected channel
+  }
+  return Wire.endTransmission();
+}
+
+void getMidC()
+{
+
+  if (mux(0)) Serial.println("Yo");
+  tcsleft.getRawDataEx(&mred, &mgreen, &mblue, &mclear);
+
+}
+
 
 float getSideDist(int x)
 { //88 - 441
@@ -16,7 +47,7 @@ float getSideDist(int x)
 
 float getFrontDist(int x)
 {
-  if (x < 80 || x > 560)
+  if (x < 80 || x > 580)
     return -1;
   else
     return 9780.9 * pow(x, -1.09);
@@ -34,15 +65,21 @@ boolean checkSide()
 
   int leftDist = getFrontDist(analogRead(FSHARP));
   //goes back to original side
+  Serial.println(rightDist);
+  Serial.println(leftDist);
   specDistTurn(90, 50, true);
-  if (rightDist == -1 || leftDist == -1 || rightDist == leftDist)
+  if (rightDist == -1  || rightDist == leftDist)
     return true;
-  else if (rightDist > leftDist )
+  else if (leftDist == -1)
+    return false;
+  else if (rightDist > leftDist)
     return true;
   else if (leftDist > rightDist)
     return false;
 }
+
 extern float encperDEG;
+
 float calcRadius(boolean side)
 {
   resetEncoder();
@@ -54,48 +91,46 @@ float calcRadius(boolean side)
   while (getFrontDist(analogRead(FSHARP)) < 30) {}
   stopMotors();
   float deg = getEncoderVal() / encperDEG;
-  Serial.println(idist);
-  Serial.println(deg);
+ // Serial.println(idist);
+  //Serial.println(deg);
   return (idist * abs(tan(deg * (3.14 / 180))));
 }
 
-void obstAvoidP1(float cm)
+void obstAvoidP1()
 {
-  float radius = cm;
+  boolean side = checkSide();
   float bufferZone = 5; //space in between robot and obstacle -- change as needed
   float tpwr = 70; //taget power level (0-127)
   float Width = 14;
+
+
+
+  float radius = calcRadius(checkSide());
+
   float inDia =  radius + bufferZone; //the inner diamter of the "ratio of circles"u
   float outDia = inDia + Width;
   float pwrRatio = inDia / outDia;
 
-  boolean side = true; //SHOULD EQUAL CHECKSIDE, CHANGED FOR TESTING
+
+
+
   //does initial turn
+
   if (side)
-    specDistTurn(65, 50, true);
+    specDistTurn(20, 50, true);
   if (!side)
-    specDistTurn(65, 50, false);
+    specDistTurn(20, 50, false);
   if (side)
     setbothSpeeds(tpwr * pwrRatio, tpwr);
   else if (!side)
     setbothSpeeds(tpwr, tpwr * pwrRatio  );
 
-  uint16_t clear, red, green, blue;
-  tcs.setInterrupt(false);      // turn on LED
-  delay(60);  // takes 50ms to read
+  getMidC();
 
-  tcs.getRawData(&red, &green, &blue, &clear);
-  tcs.setInterrupt(true);  // turn off LED
-
-  while (clear > 1600)
+  while (mclear > 1600)
   {
-    tcs.setInterrupt(false);      // turn on LED
-    delay(60);  // takes 50ms to read
-    tcs.getRawData(&red, &green, &blue, &clear);
-    tcs.setInterrupt(true);  // turn off LED
-    Serial.println(clear);
+    getMidC();
   }
-  Serial.println(clear);
 
   stopMotors();
 }
@@ -104,12 +139,16 @@ void setup()
 {
   Serial.begin(9600);
   initMotors();
-  tcs.begin();
-  Serial.println(calcRadius(true));
+  Wire.begin();
+  TWBR = 12;
+  if (mux(0))Serial.println("R.I.P. Mux");
+  tcsleft.begin();
+  delay(60);
+  
 
 }
 
 void loop()
 {
-
+  // Serial.println(getFrontDist(analogRead(FSHARP)));
 }
