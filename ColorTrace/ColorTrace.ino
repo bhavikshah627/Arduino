@@ -2,25 +2,25 @@
 #include <Wire.h>
 #include "Adafruit_TCS34725.h"
 
-const int B_L = 1890;
-const int G_L = 2510;
-const int W_L = 4650;
+const int B_L = 1110;
+const int G_L = 2014;
+const int W_L = 3485;
 
-const int B_M = 1960;
-const int W_M = 4484;
+const int B_M = 946;
+const int W_M = 3558;
 
-const int B_R = 2000;
-const int G_R = 2575;
-const int W_R = 4950;
+const int B_R = 1180;
+const int G_R = 2165;
+const int W_R = 3805;
 
-const int GREEN_GRD_L = 1000;
-const int GREEN_GRD_R = 1000;
+const int GREEN_GRD_L = 600;
+const int GREEN_GRD_R = 600;
 
-const int T_L_1 = (B_L + G_L) / 2;
-const int T_L_2 = (G_L + W_L) / 2;
+const int T_L = (B_L + W_L) / 2;
+//const int T_L_2 = (G_L + W_L) / 2;
 const int T_M = (B_M + W_M) / 2;
-const int T_R_1 = (B_R + G_R) / 2;
-const int T_R_2 = (G_R + W_R) / 2;
+const int T_R = (B_R + W_R) / 2;
+//const int T_R_2 = (G_R + W_R) / 2;
 
 int muxports[] = {1, 3};
 //left, middle, right;
@@ -110,24 +110,32 @@ void setup()
 void loop()
 {
   static int state = VEER_NONE;
-  const int  fpwr = 40;
-  const int  bpwr = -30;
-
-  //0 elment is left, 1 is middle, 2 is right
+  const int  fpwr = 127;
+  const int  bpwr = -35;
   getSideC();
   getMidC();
   char buf[40];
-  sprintf(buf, "%d, %d, %d, %d, %d", clear[0], mclear, clear[1], green[0], green[1]);
+  sprintf(buf, "%d  %d", clear[0], clear[1]);
   Serial.println(buf);
-  if (clear[0] > T_L_1 && clear[0] < T_L_2 && green[0] > GREEN_GRD_L && state != VEER_LEFT) // left sees green
-  {
-    setbothSpeeds(bpwr, fpwr);
-    state = VEER_LEFT;
+  
+  if (blue[0] < 300 && green[0] > 450)
+  {//left green --only sometimes work
+    specDist(10, 30);
+    while(mclear<T_M)
+    {
+      getMidC();
+      setbothSpeeds(-30, 30);
+    }
+    while(mclear>T_M)
+    {  
+      setbothSpeeds(-30, 30);
+      getMidC();
+    }
   }
-  else if (clear[1] < T_R_1)
+  else if (clear[1] < T_R)
   { //right sees black
     if (mclear < T_M)
-    {
+    {//middle also sees black
       specDist(1, fpwr);
       specDistTurn(5, fpwr, false);
     }
@@ -138,9 +146,43 @@ void loop()
       state = VEER_RIGHT;
     }
   }
-  else if (clear[0] < T_L_1  && clear[1] > T_R_2 && state != VEER_LEFT) { // left sees black and right sees white
+  else if (clear[0] < T_L  && clear[1] > T_R && state != VEER_LEFT)
+  { // left sees black and right sees white
     setbothSpeeds(bpwr, fpwr);
     state = VEER_LEFT;
   }
+  else if (clear[0] > T_L  && clear[1] > T_R)
+  { // left sees white and right sees white
+    setbothSpeeds(fpwr, fpwr);
+    state = VEER_STRAIGHT;
   }
+  /*else
+  {
+    int timer = millis();
+    while (clear[0] > T_L_2 && clear[1] > T_R_2) //left and right sees white //wobble wobble wobble
+    {
+      getSideC();
+      getMidC();
+      if (millis() < timer + 1000 && state != VEER_STRAIGHT) // go forward for 1 second
+      {
+        setbothSpeeds(fpwr, fpwr);
+        state = VEER_STRAIGHT;
+      }
+      else
+      {
+        //     current time - starting time - 1sec foward time = time passed since 1 second forward
+        //     time passed / 1000 = how many seconds passed
+        //     seconds passed mod 2 = odd or even amnt. of seconds passed
+        if ((((millis() - timer - 1000) / 1000) % 2) == 1) // intervals of 1 millisecond wobble
+        {
+          setbothSpeeds(fpwr, 0);
+        }
+        else if ((((millis() - timer - 1000) / 1000) % 2) == 0)
+        {
+          setbothSpeeds(0, fpwr);
+        }
+      }
+      delay(20);
+    }
+  }*/
 }
