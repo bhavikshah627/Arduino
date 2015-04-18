@@ -3,18 +3,15 @@
 #include "Adafruit_TCS34725.h"
 
 const int B_L = 1110;
-const int G_L = 2014;
+//const int G_L = 2014;
 const int W_L = 3485;
 
 const int B_M = 946;
 const int W_M = 3558;
 
 const int B_R = 1180;
-const int G_R = 2165;
-const int W_R = 3805;
-
-const int GREEN_GRD_L = 600;
-const int GREEN_GRD_R = 600;
+//const int G_R = 2165;
+const int W_R = 3805;;
 
 const int T_L = (B_L + W_L) / 2;
 //const int T_L_2 = (G_L + W_L) / 2;
