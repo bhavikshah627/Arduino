@@ -19,6 +19,12 @@ const int T_M = (B_M + W_M) / 2;
 const int T_R = (B_R + W_R) / 2;
 //const int T_R_2 = (G_R + W_R) / 2;
 
+//use of states to prevent overuse of serial
+const int VEER_NONE = 0;
+const int VEER_LEFT  = 1;
+const int VEER_RIGHT  = 2;
+const int VEER_STRAIGHT = 3;
+const int FSHARP = A3;
 int muxports[] = {1, 3};
 //left, middle, right;
 const int numports = sizeof(muxports) / sizeof(int);
@@ -41,10 +47,92 @@ void getSideC()
   }
 }
 
-const int VEER_NONE = 0;
-const int VEER_LEFT  = 1;
-const int VEER_RIGHT  = 2;
-const int VEER_STRAIGHT = 3;
+float getFrontDist(int x)
+{
+  if (x < 80 || x > 580)
+    return -1;
+  else
+    return 9780.9 * pow(x, -1.09);
+}
+
+boolean checkSide()
+{
+  //returns true if rightside is greater, left is false
+  specDistTurn(90, 60, true);
+  delay(500);
+
+  int rightDist = getFrontDist(analogRead(FSHARP));
+  specDistTurn(180, 50, false);
+  delay(500);
+
+  int leftDist = getFrontDist(analogRead(FSHARP));
+  //goes back to original side
+  Serial.println(rightDist);
+  Serial.println(leftDist);
+  specDistTurn(90, 50, true);
+  if (rightDist == -1  || rightDist == leftDist)
+    return true;
+  else if (leftDist == -1)
+    return false;
+  else if (rightDist > leftDist)
+    return true;
+  else if (leftDist > rightDist)
+    return false;
+}
+
+extern float encperDEG;
+
+float calcRadius(boolean side)
+{
+  resetEncoder();
+  float idist = getFrontDist(analogRead(FSHARP));
+  if (side)
+    setbothSpeeds(35, -35);
+  else
+    setbothSpeeds(-35, 35);
+  float x = getFrontDist(analogRead(FSHARP));
+  while (x < 30 && x != -1) {
+    x = getFrontDist(analogRead(FSHARP));
+  }
+  stopMotors();
+  float deg = getEncoderVal() / encperDEG;
+  Serial.println(idist);
+  Serial.println(deg);
+  return (idist * abs(tan(deg * (3.14 / 180))));
+}
+
+void obstAvoidP1()
+{
+  boolean side = true;
+  float bufferZone = 5; //space in between robot and obstacle -- change as needed
+  float tpwr = 70; //taget power level (0-127)
+  float Width = 14;
+
+  float radius = calcRadius(side);
+  stopMotors();
+  delay(1000);
+  float inDia =  radius + bufferZone; //the inner diamter of the "ratio of circles"u
+  float outDia = inDia + Width;
+  float pwrRatio = inDia / outDia;
+
+  if (side)
+    specDistTurn(40, 50, true);
+  else if (!side)
+    specDistTurn(40, 50, false);
+  if (side)
+    setbothSpeeds(tpwr * pwrRatio, tpwr);
+  else if (!side)
+    setbothSpeeds(tpwr, tpwr * pwrRatio  );
+
+  getMidC();
+
+  while (mclear > 1600)
+  {
+    getMidC();
+  }
+
+  stopMotors();
+}
 
 int mux(byte channel)
 {
@@ -107,15 +195,19 @@ void setup()
 void loop()
 {
   static int state = VEER_NONE;
-  const int  fpwr = 40;
-  const int  bpwr = -35;
+  const int  fpwr = 30;
+  const int  bpwr = -20;
   getSideC();
   getMidC();
   char buf[40];
   sprintf(buf, "%d  %d %d %d %d %d", clear[0], blue[0], green[0], clear[1], blue[1], green[1]);
   Serial.println(buf);
-
-  if (blue[0] < 400 && green[0] > 600)
+  int dist = getFrontDist(analogRead(FSHARP));
+  if(dist<12 && dist != -1)
+  {
+    obstAvoidP1();
+  }
+  else if (blue[0] < 400 && green[0] > 600)
   { //left green --only sometimes work
     stopMotors();
     delay(500);
@@ -171,33 +263,4 @@ void loop()
     setbothSpeeds(fpwr, fpwr);
     state = VEER_STRAIGHT;
   }
-  /*else
-  {
-    int timer = millis();
-    while (clear[0] > T_L_2 && clear[1] > T_R_2) //left and right sees white //wobble wobble wobble
-    {
-      getSideC();
-      getMidC();
-      if (millis() < timer + 1000 && state != VEER_STRAIGHT) // go forward for 1 second
-      {
-        setbothSpeeds(fpwr, fpwr);
-        state = VEER_STRAIGHT;
-      }
-      else
-      {
-        //     current time - starting time - 1sec foward time = time passed since 1 second forward
-        //     time passed / 1000 = how many seconds passed
-        //     seconds passed mod 2 = odd or even amnt. of seconds passed
-        if ((((millis() - timer - 1000) / 1000) % 2) == 1) // intervals of 1 millisecond wobble
-        {
-          setbothSpeeds(fpwr, 0);
-        }
-        else if ((((millis() - timer - 1000) / 1000) % 2) == 0)
-        {
-          setbothSpeeds(0, fpwr);
-        }
-      }
-      delay(20);
-    }
-  }*/
 }

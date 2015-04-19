@@ -85,41 +85,36 @@ float calcRadius(boolean side)
   resetEncoder();
   float idist = getFrontDist(analogRead(FSHARP));
   if (side)
-    setbothSpeeds(25, -25);
+    setbothSpeeds(35, -35);
   else
-    setbothSpeeds(-25, 25);
-  while (getFrontDist(analogRead(FSHARP)) < 30) {}
+    setbothSpeeds(-35, 35);
+  float x = getFrontDist(analogRead(FSHARP));
+  while (x < 30 && x != -1) {x = getFrontDist(analogRead(FSHARP));}
   stopMotors();
   float deg = getEncoderVal() / encperDEG;
- // Serial.println(idist);
-  //Serial.println(deg);
+  Serial.println(idist);
+  Serial.println(deg);
   return (idist * abs(tan(deg * (3.14 / 180))));
 }
 
 void obstAvoidP1()
 {
-  boolean side = checkSide();
+  boolean side = true;
   float bufferZone = 5; //space in between robot and obstacle -- change as needed
   float tpwr = 70; //taget power level (0-127)
   float Width = 14;
 
-
-
-  float radius = calcRadius(checkSide());
-
+  float radius = calcRadius(side);
+  stopMotors();
+  delay(1000);
   float inDia =  radius + bufferZone; //the inner diamter of the "ratio of circles"u
   float outDia = inDia + Width;
   float pwrRatio = inDia / outDia;
 
-
-
-
-  //does initial turn
-
   if (side)
-    specDistTurn(20, 50, true);
-  if (!side)
-    specDistTurn(20, 50, false);
+    specDistTurn(40, 50, true);
+  else if (!side)
+    specDistTurn(40, 50, false);
   if (side)
     setbothSpeeds(tpwr * pwrRatio, tpwr);
   else if (!side)
@@ -144,11 +139,9 @@ void setup()
   if (mux(0))Serial.println("R.I.P. Mux");
   tcsleft.begin();
   delay(60);
-  
-
+  obstAvoidP1();
 }
 
 void loop()
 {
-  // Serial.println(getFrontDist(analogRead(FSHARP)));
 }

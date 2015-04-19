@@ -75,14 +75,15 @@ void setup()
       Serial.println("Found sensor");
       tcsleft.setInterrupt(false);
     }
-    else {
+    else 
+    {
       Serial.println("No TCS34725 found ... check your connections");
       while (1); // halt!
     }
   }
 
   delay(60);
-  initMotors()
+  initMotors();
 }
 
 //green = 726, 763, 383
@@ -92,11 +93,11 @@ void loop() {
   getMidC();
   char buf[40];
 //  sprintf(buf, "%d < %d < %d, %d < %d", T_L_1, clear[0], T_L_2, GREEN_GRD_L, green[0]);
-sprintf(buf, "blue: %d, green: %d, red: %d", blue[0], green[0], red[0]);
+sprintf(buf, "blue: %d, green: %d, red: %d", blue[1], green[1], red[1]);
 //  sprintf(buf, "clear: %d", clear[0]);
   Serial.print(buf);
 
-  if (blue[0] < 300 && green[0] > 450)
+ if (blue[1] < 400 && green[1] > 600)
   {
     Serial.print(" GREEN");
   }
