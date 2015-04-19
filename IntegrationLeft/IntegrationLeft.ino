@@ -207,7 +207,7 @@ void loop()
   {
     obstAvoidP1();
   }
-  else if (blue[0] < 350 && green[0] > 500)
+  /*else if (blue[0] < 350 && green[0] > 500)
   { //left green --only sometimes work
     stopMotors();
     delay(500);
@@ -238,29 +238,29 @@ void loop()
       setbothSpeeds(30, -30);
       getMidC();
     }
-  }
-  else if (clear[1] < T_R)
-  { //right sees black
-    if (mclear < T_M)
+  }*/
+  else if (clear[0] < T_L)
+  { //left sees black
+    /*if (mclear < T_M)
     { //middle also sees black
       specDist(1, fpwr);
       //specDistTurn(5, fpwr, false);
-    }
-    else if (state != VEER_RIGHT)
+    }*/
+    if (state != VEER_LEFT)
     {
-      Serial.println("RIGHT");
-      setbothSpeeds(fpwr, bpwr);
-      state = VEER_RIGHT;
+      Serial.println("LEFT");
+      setbothSpeeds(bpwr, fpwr);
+      state = VEER_LEFT;
     }
   }
-  else if (clear[0] < T_L  && clear[1] > T_R && state != VEER_LEFT)
-  { // left sees black and right sees white
-    setbothSpeeds(bpwr, fpwr);
-    state = VEER_LEFT;
+  else if (clear[1] < T_R  && clear[0] > T_L && state != VEER_RIGHT)
+  { // left sees white and right sees black
+    setbothSpeeds(fpwr, bpwr);
+    state = VEER_RIGHT;
   }
   else if (clear[0] > T_L  && clear[1] > T_R)
   { // left sees white and right sees white
     setbothSpeeds(fpwr, fpwr);
     state = VEER_STRAIGHT;
   }
-}
+} 7

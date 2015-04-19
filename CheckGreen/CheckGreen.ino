@@ -60,6 +60,7 @@ int mux(byte channel)
   return Wire.endTransmission();
 }
 
+  
 void setup()
 {
   Serial.begin(9600);
@@ -75,12 +76,15 @@ void setup()
       Serial.println("Found sensor");
       tcsleft.setInterrupt(false);
     }
-    else 
+    else
     {
       Serial.println("No TCS34725 found ... check your connections");
       while (1); // halt!
     }
   }
+  
+  mux(0);
+  tcsleft.begin();
 
   delay(60);
   initMotors();
@@ -92,16 +96,16 @@ void loop() {
   getSideC();
   getMidC();
   char buf[40];
-//  sprintf(buf, "%d < %d < %d, %d < %d", T_L_1, clear[0], T_L_2, GREEN_GRD_L, green[0]);
-sprintf(buf, "blue: %d, green: %d, red: %d", blue[1], green[1], red[1]);
-//  sprintf(buf, "clear: %d", clear[0]);
+  //  sprintf(buf, "%d < %d < %d, %d < %d", T_L_1, clear[0], T_L_2, GREEN_GRD_L, green[0]);
+  sprintf(buf, "left: %d, mid: %d, right: %d", clear[0], mclear, clear[1]);
+  //sprintf(buf, "clear: %d clear", clear[0], clear[1]);
   Serial.print(buf);
 
- if (blue[1] < 400 && green[1] > 600)
+  if (blue[1] < 350 && green[1] > 500)
   {
-    Serial.print(" GREEN");
+   //Serial.print(" GREEN");
   }
-  
+
   Serial.println();
 
 }
